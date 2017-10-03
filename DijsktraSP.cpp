@@ -4,8 +4,8 @@
 
 using namespace std;
 
-void DijkstraSP::ShortestPath (int src, int dest, vector<vector<int>> preceedors) {
-	
+void DijkstraSP::ShortestPath (int src, int dest, vector<vector<int>> graph) {
+	vector<int> dist;	
 
 
 	// To initialize the Algorithm: 
