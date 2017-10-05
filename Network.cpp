@@ -9,15 +9,16 @@ void Network::ReadTopology (void) {
 	FILE * nettopo;
 	char file_name[100];
 	unsigned int number;
-	unsigned int NumofNodes = 0;
 	int temp;
-	vector <int> HNodesWeight;
-	vector< vector<int> > NodesWeight;
+	vector <double> HNodesWeight;
 
-	cout << "Choose from the available network topology:" << endl;
+	cout << "**************************************************" << endl;
+	cout << "Choose from these available network topologies:" << endl; 
 	cout << "1. NSF" << endl;
 	cout << "2. ESNET" << endl;
 	cout << "3. ITALY" << endl;	
+	cout << "**************************************************" << endl;
+
 	cin >> number;
 	switch (number) {
 		case 1: 
@@ -46,13 +47,4 @@ void Network::ReadTopology (void) {
 		NodesWeight.push_back (HNodesWeight);
 		HNodesWeight.clear ();
 	}
-
-	printf ("\n");
-	for (int i = 0; i < NumofNodes; i++) {
-		for (int j = 0; j < NumofNodes; j++) {
-			printf ("%d ", NodesWeight[i][j]);
-		}
-		printf ("\n");
-	}
-	
 }
