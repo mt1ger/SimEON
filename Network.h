@@ -7,12 +7,14 @@ class Network {
     // *** Variables ***
 	unsigned int NumofNodes;
 	vector< vector<double> > NodesWeight;
-	
-
+	vector< vector< vector<int> > > routingTable;	
 
 
 
 	// *** Functions ***	
-		void ReadTopology ();
+		void read_topology ();
+		void init ();
+
 	private:
+		Dijkstra dijkstra;
 };

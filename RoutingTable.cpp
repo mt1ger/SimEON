@@ -1,0 +1,103 @@
+#include <iostream>
+#include <vector>
+#include <stack>
+#include "RoutingTable.h"
+
+using namespace std;
+
+vector<vector <int> > RoutingTable::single_src_routing_table (int src) {
+	int u;
+
+	stack<int> pathStack;
+	vector<int> shortestPath;
+	vector< vector<int> > singleSrcRoutingTable;
+
+	for (int j = 0; j < dijkstra.network.NumofNodes; j++) {
+		if (j == src) {
+			pathStack.push (-1);	
+		}
+		else
+			pathStack.push (j);
+		int temp = j;
+		while (temp != src) {
+			pathStack.push (predecessors[src].at (temp));	
+			temp = predecessors[src].at (temp);
+		}
+
+		while(!pathStack.empty())
+		{
+			shortestPath.push_back(pathStack.top());
+			pathStack.pop();		
+		}	
+
+		singleSrcRoutingTable.push_back (shortestPath);
+		shortestPath.clear ();
+	}
+
+	return singleSrcRoutingTable;
+}
+
+void RoutingTable::get_predecessor_list () {
+	vector<int> hpredecessors;
+	// Dijkstra dijkstra;
+	dijkstra.network.read_topology ();
+	dijkstra.ajacent_nodes (dijkstra.AjacentNodes);
+	
+	for (int i = 0; i < dijkstra.network.NumofNodes; i++) {
+		dijkstra.shortest_path (i, -1, hpredecessors);
+		predecessors.push_back (hpredecessors);
+		hpredecessors.clear ();
+
+	}
+
+	//debugging
+	cout << endl;
+	for (int i = 0; i < dijkstra.network.NumofNodes; i++) {
+		for (int j = 0; j < dijkstra.network.NumofNodes; j++) {
+			cout << ' ' << predecessors[i][j] + 1;
+		}
+		cout << endl;
+	}
+	//end debugging
+}
+
+
+void RoutingTable::generate_routing_table () {
+	for (int i = 0; i < dijkstra.network.NumofNodes; i++) {
+		routingTable.push_back (single_src_routing_table (i));
+	}
+	
+	//Debuggin
+	cout << endl;
+	for (int i = 0; i < dijkstra.network.NumofNodes; i++) {
+		cout << endl;
+		cout << "start to print table" << endl;
+		for (int j = 0; j < dijkstra.network.NumofNodes; j++) {
+			for (int k = 0; k < routingTable[i][j].size (); k++) {
+				cout << ' ' << routingTable[i][j][k] + 1;	
+			}
+			cout << endl;
+		}	
+	}
+}
+
+vector<int> RoutingTable::get_shortest_path (int src, int dest) {
+	vector<int> shortestPath;
+
+	get_predecessor_list ();
+	generate_routing_table ();
+	
+	for (int i = 0; i < routingTable[src][dest].size (); i++) {
+		shortestPath.push_back (routingTable[src][dest][i]);	
+	}
+
+	// Debugging code
+	cout << endl;
+	for (int i = 0; i < routingTable[src][dest].size (); i++) {
+		cout << shortestPath[i] << ' '; 	
+	}
+	
+	return shortestPath;
+}
+
+

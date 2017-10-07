@@ -7,7 +7,7 @@ using namespace std;
 
 int main (void) {
 	Network network;
-	DijkstraSP dijkstra;
+	Dijkstra dijkstra;
 	vector<int> predecessors;
 		
 	

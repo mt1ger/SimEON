@@ -5,7 +5,7 @@
 
 using namespace std;
 
-void Network::ReadTopology (void) {
+void Network::read_topology (void) {
 	FILE * nettopo;
 	char file_name[100];
 	unsigned int number;
@@ -47,4 +47,11 @@ void Network::ReadTopology (void) {
 		NodesWeight.push_back (HNodesWeight);
 		HNodesWeight.clear ();
 	}
+}
+
+
+void Network::init () {
+	read_topology ();
+	dijkstra.network.NumofNodes = NumofNodes;
+
 }

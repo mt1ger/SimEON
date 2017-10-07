@@ -1,11 +1,11 @@
 #include "Network.h" 
 
-class DijkstraSP {
+class Dijkstra {
 	public:
 		void shortest_path (int src, int dest, vector<int> &predecessors);
-		void ajacent_nodes (vector< vector<int> > &AjacentNodes);
+		void ajacent_nodes (vector< vector<int> > &AjacentNodes, unsigned int NumofNodes);
 
-	private:
-		Network network;
 		vector< vector<int> > AjacentNodes;
+		Network network;
+	private:
 };

@@ -13,13 +13,13 @@ int compare_double (double a, double b) {
 }
 
 
-void DijkstraSP::ajacent_nodes (vector< vector<int> > &AjacentNodes) {
+void Dijkstra::ajacent_nodes (vector< vector<int> > &AjacentNodes, unsigned int NumofNodes, vector< vector<int> > ) {
 
 	vector <int> HAjecentNodes;
 
-	for (int i = 0; i < network.NumofNodes; i++) {
-		for (int j = 0; j < network.NumofNodes; j++) {
-			if (!compare_double (network.NodesWeight[i][j], -1) && (j != i))
+	for (int i = 0; i < NumofNodes; i++) {
+		for (int j = 0; j < :wNumofNodes; j++) {
+			if (!compare_double (NodesWeight[i][j], -1) && (j != i))
 				HAjecentNodes.push_back (j); 	
 		}
 		AjacentNodes.push_back (HAjecentNodes);
@@ -28,7 +28,7 @@ void DijkstraSP::ajacent_nodes (vector< vector<int> > &AjacentNodes) {
 }
 
 
-void DijkstraSP::shortest_path (int src, int dest, vector<int> &predecessors) {
+void Dijkstra::shortest_path (int src, int dest, vector<int> &predecessors) {
 
 	vector<double> dist;	
 	vector<bool> visited;
@@ -37,10 +37,10 @@ void DijkstraSP::shortest_path (int src, int dest, vector<int> &predecessors) {
 	int next;
 	int MinDist;
 
-	network.ReadTopology ();
+	network.read_topology ();
 	ajacent_nodes (AjacentNodes);
 
-	// To initialize the Algorithm: 
+	// To initialize the Algorithm:
 	vector<int> HPredecessor (1, -1);
 	for (int i = 0; i < network.NumofNodes; i++) {
 		dist.push_back (INFINITY);
