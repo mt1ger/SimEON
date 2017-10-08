@@ -1,11 +1,14 @@
-#include "Network.h" 
+#include <vector>
+#include "Topology.h" 
+
+using namespace std;
 
 class Dijkstra {
 	public:
 		void shortest_path (int src, int dest, vector<int> &predecessors);
-		void ajacent_nodes (vector< vector<int> > &AjacentNodes, unsigned int NumofNodes);
+		void ajacent_nodes (vector< vector<int> > &AjacentNodes);
 
 		vector< vector<int> > AjacentNodes;
-		Network network;
+		Topology topology;
 	private:
 };

@@ -5,14 +5,14 @@
 
 using namespace std;
 
-vector<vector <int> > RoutingTable::single_src_routing_table (int src) {
+vector< vector <int> > RoutingTable::single_src_routing_table (int src) {
 	int u;
 
 	stack<int> pathStack;
 	vector<int> shortestPath;
 	vector< vector<int> > singleSrcRoutingTable;
 
-	for (int j = 0; j < dijkstra.network.NumofNodes; j++) {
+	for (int j = 0; j < dijkstra.topology.NumofNodes; j++) {
 		if (j == src) {
 			pathStack.push (-1);	
 		}
@@ -40,10 +40,10 @@ vector<vector <int> > RoutingTable::single_src_routing_table (int src) {
 void RoutingTable::get_predecessor_list () {
 	vector<int> hpredecessors;
 	// Dijkstra dijkstra;
-	dijkstra.network.read_topology ();
+	dijkstra.topology.read_topology ();
 	dijkstra.ajacent_nodes (dijkstra.AjacentNodes);
 	
-	for (int i = 0; i < dijkstra.network.NumofNodes; i++) {
+	for (int i = 0; i < dijkstra.topology.NumofNodes; i++) {
 		dijkstra.shortest_path (i, -1, hpredecessors);
 		predecessors.push_back (hpredecessors);
 		hpredecessors.clear ();
@@ -52,8 +52,8 @@ void RoutingTable::get_predecessor_list () {
 
 	//debugging
 	cout << endl;
-	for (int i = 0; i < dijkstra.network.NumofNodes; i++) {
-		for (int j = 0; j < dijkstra.network.NumofNodes; j++) {
+	for (int i = 0; i < dijkstra.topology.NumofNodes; i++) {
+		for (int j = 0; j < dijkstra.topology.NumofNodes; j++) {
 			cout << ' ' << predecessors[i][j] + 1;
 		}
 		cout << endl;
@@ -63,16 +63,20 @@ void RoutingTable::get_predecessor_list () {
 
 
 void RoutingTable::generate_routing_table () {
-	for (int i = 0; i < dijkstra.network.NumofNodes; i++) {
+
+
+	get_predecessor_list ();
+
+	for (int i = 0; i < dijkstra.topology.NumofNodes; i++) {
 		routingTable.push_back (single_src_routing_table (i));
 	}
 	
 	//Debuggin
 	cout << endl;
-	for (int i = 0; i < dijkstra.network.NumofNodes; i++) {
+	for (int i = 0; i < dijkstra.topology.NumofNodes; i++) {
 		cout << endl;
 		cout << "start to print table" << endl;
-		for (int j = 0; j < dijkstra.network.NumofNodes; j++) {
+		for (int j = 0; j < dijkstra.topology.NumofNodes; j++) {
 			for (int k = 0; k < routingTable[i][j].size (); k++) {
 				cout << ' ' << routingTable[i][j][k] + 1;	
 			}
@@ -84,8 +88,6 @@ void RoutingTable::generate_routing_table () {
 vector<int> RoutingTable::get_shortest_path (int src, int dest) {
 	vector<int> shortestPath;
 
-	get_predecessor_list ();
-	generate_routing_table ();
 	
 	for (int i = 0; i < routingTable[src][dest].size (); i++) {
 		shortestPath.push_back (routingTable[src][dest][i]);	
@@ -94,7 +96,7 @@ vector<int> RoutingTable::get_shortest_path (int src, int dest) {
 	// Debugging code
 	cout << endl;
 	for (int i = 0; i < routingTable[src][dest].size (); i++) {
-		cout << shortestPath[i] << ' '; 	
+		cout << shortestPath[i] + 1 << ' '; 	
 	}
 	
 	return shortestPath;

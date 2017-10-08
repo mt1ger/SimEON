@@ -1,20 +1,11 @@
 #include <vector>
-
-using namespace std;
+#include "RoutingTable.h"
 
 class Network {
 	public:
-    // *** Variables ***
-	unsigned int NumofNodes;
-	vector< vector<double> > NodesWeight;
-	vector< vector< vector<int> > > routingTable;	
-
-
-
-	// *** Functions ***	
-		void read_topology ();
 		void init ();
 
+		vector< vector< vector<int> > > Rtable;
+		RoutingTable routinGTable;
 	private:
-		Dijkstra dijkstra;
 };
