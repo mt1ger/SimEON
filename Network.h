@@ -1,11 +1,19 @@
 #include <vector>
-#include "RoutingTable.h"
+// #include "TrafficGenerator.h"
+// #include "RoutingTable.h"
+//
+using namespace std;
 
 class Network {
 	public:
 		void init ();
 
-		vector< vector< vector<int> > > Rtable;
-		RoutingTable routinGTable;
+		unsigned int NumofNodes; 
+		vector< vector<double> > NodesWeight;
+		vector< vector< vector<int> > > routingTable;
+		
+
+
+		void print ();
 	private:
 };

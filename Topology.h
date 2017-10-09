@@ -1,12 +1,15 @@
 #include <vector>
+#include "Network.h"
 
 using namespace std;
 
 class Topology {
 	public:
     // *** Variables ***
-	unsigned int NumofNodes;
-	vector< vector<double> > NodesWeight;
+	Topology (Network * net) {network = net;}
+	~Topology () {}
+	// unsigned int NumofNodes;
+	// vector< vector<double> > NodesWeight;
 
 
 
@@ -14,4 +17,5 @@ class Topology {
 		void read_topology ();
 
 	private:
+		Network * network;
 };

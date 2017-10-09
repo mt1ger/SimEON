@@ -12,7 +12,7 @@ vector< vector <int> > RoutingTable::single_src_routing_table (int src) {
 	vector<int> shortestPath;
 	vector< vector<int> > singleSrcRoutingTable;
 
-	for (int j = 0; j < dijkstra.topology.NumofNodes; j++) {
+	for (int j = 0; j < network->NumofNodes; j++) {
 		if (j == src) {
 			pathStack.push (-1);	
 		}
@@ -39,11 +39,13 @@ vector< vector <int> > RoutingTable::single_src_routing_table (int src) {
 
 void RoutingTable::get_predecessor_list () {
 	vector<int> hpredecessors;
-	// Dijkstra dijkstra;
-	dijkstra.topology.read_topology ();
+	Topology topology (network);
+	Dijkstra dijkstra (network);
+
+	topology.read_topology ();
 	dijkstra.ajacent_nodes (dijkstra.AjacentNodes);
 	
-	for (int i = 0; i < dijkstra.topology.NumofNodes; i++) {
+	for (int i = 0; i < network->NumofNodes; i++) {
 		dijkstra.shortest_path (i, -1, hpredecessors);
 		predecessors.push_back (hpredecessors);
 		hpredecessors.clear ();
@@ -52,8 +54,8 @@ void RoutingTable::get_predecessor_list () {
 
 	//debugging
 	cout << endl;
-	for (int i = 0; i < dijkstra.topology.NumofNodes; i++) {
-		for (int j = 0; j < dijkstra.topology.NumofNodes; j++) {
+	for (int i = 0; i < network->NumofNodes; i++) {
+		for (int j = 0; j < network->NumofNodes; j++) {
 			cout << ' ' << predecessors[i][j] + 1;
 		}
 		cout << endl;
@@ -67,18 +69,18 @@ void RoutingTable::generate_routing_table () {
 
 	get_predecessor_list ();
 
-	for (int i = 0; i < dijkstra.topology.NumofNodes; i++) {
-		routingTable.push_back (single_src_routing_table (i));
+	for (int i = 0; i < network->NumofNodes; i++) {
+		network->routingTable.push_back (single_src_routing_table (i));
 	}
 	
 	//Debuggin
 	cout << endl;
-	for (int i = 0; i < dijkstra.topology.NumofNodes; i++) {
+	for (int i = 0; i < network->NumofNodes; i++) {
 		cout << endl;
 		cout << "start to print table" << endl;
-		for (int j = 0; j < dijkstra.topology.NumofNodes; j++) {
-			for (int k = 0; k < routingTable[i][j].size (); k++) {
-				cout << ' ' << routingTable[i][j][k] + 1;	
+		for (int j = 0; j < network->NumofNodes; j++) {
+			for (int k = 0; k < network->routingTable[i][j].size (); k++) {
+				cout << ' ' << network->routingTable[i][j][k] + 1;	
 			}
 			cout << endl;
 		}	
@@ -89,13 +91,13 @@ vector<int> RoutingTable::get_shortest_path (int src, int dest) {
 	vector<int> shortestPath;
 
 	
-	for (int i = 0; i < routingTable[src][dest].size (); i++) {
-		shortestPath.push_back (routingTable[src][dest][i]);	
+	for (int i = 0; i < network->routingTable[src][dest].size (); i++) {
+		shortestPath.push_back (network->routingTable[src][dest][i]);	
 	}
 
 	// Debugging code
 	cout << endl;
-	for (int i = 0; i < routingTable[src][dest].size (); i++) {
+	for (int i = 0; i < network->routingTable[src][dest].size (); i++) {
 		cout << shortestPath[i] + 1 << ' '; 	
 	}
 	

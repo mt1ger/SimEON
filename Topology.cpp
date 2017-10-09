@@ -35,19 +35,23 @@ void Topology::read_topology (void) {
 			break;
 	}
 
-	fscanf (nettopo, "%d", &NumofNodes);		
-	cout << "There are " << NumofNodes << " nodes in this topology." << endl;
+	cout << "what" << network->NumofNodes << endl;
 
-	for (int i = 0; i < NumofNodes; i++) {
-		for (int j = 0; j < NumofNodes; j++) {
+	fscanf (nettopo, "%d", &network->NumofNodes);		
+	cout << "There are " << network->NumofNodes << " nodes in this topology." << endl;
+
+	for (int i = 0; i < network->NumofNodes; i++) {
+		for (int j = 0; j < network->NumofNodes; j++) {
 			// fscanf (nettopo, "%d", &nodes[i][j]);
 			fscanf (nettopo, "%d", &temp); 
 			HNodesWeight.push_back (temp);
 		}
 
-		NodesWeight.push_back (HNodesWeight);
+	network->NodesWeight.push_back (HNodesWeight);
 		HNodesWeight.clear ();
 	}
+
+	fclose (nettopo);
 }
 
 
