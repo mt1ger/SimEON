@@ -13,6 +13,6 @@ int uniform_rv (int NumofNodes) {
 double exponential_rv (double lambda) {
     double exp;
 
-    exp = ((-1) / lambda) * log(universal_rv ());
+    exp = ((-1) / lambda) * log (universal_rv ());
     return (exp);
 }   	

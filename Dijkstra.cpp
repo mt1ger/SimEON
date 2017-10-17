@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
-// #include "Topology.h" 
 #include "Dijkstra.h"
 
 #define EPSILON 0.00000001
@@ -33,13 +32,9 @@ void Dijkstra::shortest_path (int src, int dest, vector<int> &predecessors) {
 
 	vector<double> dist;	
 	vector<bool> visited;
-	// vector < vector<int> > AjacentNodes;
 	int k;
 	int next;
 	int MinDist;
-
-	// network->read_network->();
-	// ajacent_nodes (AjacentNodes);
 
 	// To initialize the Algorithm:
 	vector<int> HPredecessor (1, -1);
@@ -50,15 +45,12 @@ void Dijkstra::shortest_path (int src, int dest, vector<int> &predecessors) {
 	}
 
 
-
-
 	int counter = 0;
 	dist[src] = 0;
 	visited[src] = true;
 	next = src;
 
 	while (counter < network->NumofNodes) {
-
 		for (int j = 0; j < AjacentNodes[next].size (); j++) {
 			if (!visited[AjacentNodes[next][j]] && ((dist[next] + network->NodesWeight[next][AjacentNodes[next][j]]) < dist[AjacentNodes[next][j]])) { 
 				dist[AjacentNodes[next][j]] = (dist[next] + network->NodesWeight[next][AjacentNodes[next][j]]);	

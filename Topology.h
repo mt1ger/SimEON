@@ -1,3 +1,6 @@
+#ifndef _TOPOLOGY_H
+#define  _TOPOLOGY_H
+
 #include <vector>
 #include "Network.h"
 
@@ -8,10 +11,6 @@ class Topology {
     // *** Variables ***
 	Topology (Network * net) {network = net;}
 	~Topology () {}
-	// unsigned int NumofNodes;
-	// vector< vector<double> > NodesWeight;
-
-
 
 	// *** Functions ***	
 		void read_topology ();
@@ -19,3 +18,5 @@ class Topology {
 	private:
 		Network * network;
 };
+
+#endif

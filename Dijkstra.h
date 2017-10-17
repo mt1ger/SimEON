@@ -1,4 +1,8 @@
+#ifndef _DIJKSTRA_H
+#define  _DIJKSTRA_H
+
 #include <vector>
+#include "Network.h"
 #include "Topology.h" //only to let this header know "Network.h"
 
 using namespace std;
@@ -16,3 +20,5 @@ class Dijkstra {
 	private:
 		Network * network;
 };
+
+#endif

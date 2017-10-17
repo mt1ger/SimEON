@@ -1,3 +1,8 @@
+
+// #define DEBUG_get_predecessor_list
+// #define DEBUG_generate_routing_table
+// #define DEBUG_get_shortest_path
+
 #include <iostream>
 #include <vector>
 #include <stack>
@@ -51,8 +56,8 @@ void RoutingTable::get_predecessor_list () {
 		hpredecessors.clear ();
 
 	}
-
-	//debugging
+	
+	#ifdef DEBUG_get_predecessor_list
 	cout << endl;
 	for (int i = 0; i < network->NumofNodes; i++) {
 		for (int j = 0; j < network->NumofNodes; j++) {
@@ -60,7 +65,7 @@ void RoutingTable::get_predecessor_list () {
 		}
 		cout << endl;
 	}
-	//end debugging
+	#endif
 }
 
 
@@ -73,11 +78,11 @@ void RoutingTable::generate_routing_table () {
 		network->routingTable.push_back (single_src_routing_table (i));
 	}
 	
-	//Debuggin
+	#ifdef  DEBUG_generate_routing_table	
 	cout << endl;
 	for (int i = 0; i < network->NumofNodes; i++) {
 		cout << endl;
-		cout << "start to print table" << endl;
+		cout << "Start to print table " << i << endl;
 		for (int j = 0; j < network->NumofNodes; j++) {
 			for (int k = 0; k < network->routingTable[i][j].size (); k++) {
 				cout << ' ' << network->routingTable[i][j][k] + 1;	
@@ -85,6 +90,7 @@ void RoutingTable::generate_routing_table () {
 			cout << endl;
 		}	
 	}
+	#endif
 }
 
 vector<int> RoutingTable::get_shortest_path (int src, int dest) {
@@ -95,11 +101,12 @@ vector<int> RoutingTable::get_shortest_path (int src, int dest) {
 		shortestPath.push_back (network->routingTable[src][dest][i]);	
 	}
 
-	// Debugging code
+	#ifdef DEBUG_get_shortest_path
 	cout << endl;
 	for (int i = 0; i < network->routingTable[src][dest].size (); i++) {
 		cout << shortestPath[i] + 1 << ' '; 	
 	}
+	#endif
 	
 	return shortestPath;
 }

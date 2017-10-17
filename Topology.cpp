@@ -42,7 +42,6 @@ void Topology::read_topology (void) {
 
 	for (int i = 0; i < network->NumofNodes; i++) {
 		for (int j = 0; j < network->NumofNodes; j++) {
-			// fscanf (nettopo, "%d", &nodes[i][j]);
 			fscanf (nettopo, "%d", &temp); 
 			HNodesWeight.push_back (temp);
 		}
