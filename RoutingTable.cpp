@@ -102,7 +102,6 @@ vector<int> RoutingTable::get_shortest_path (int src, int dest) {
 	}
 
 	#ifdef DEBUG_get_shortest_path
-	cout << endl;
 	for (int i = 0; i < network->routingTable[src][dest].size (); i++) {
 		cout << shortestPath[i] + 1 << ' '; 	
 	}

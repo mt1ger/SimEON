@@ -12,30 +12,7 @@ void Topology::read_topology (void) {
 	int temp;
 	vector <double> HNodesWeight;
 
-	cout << "**************************************************" << endl;
-	cout << "Choose from these available network topologies:" << endl; 
-	cout << "1. NSF" << endl;
-	cout << "2. ESNET" << endl;
-	cout << "3. ITALY" << endl;	
-	cout << "**************************************************" << endl;
-
-	cin >> number;
-	switch (number) {
-		case 1: 
-			cout << "The topology chosen is NSF." << endl;
-			nettopo = fopen ("./Topology/NFS14.txt", "r");
-			break;
-		case 2: 
-			cout << "The topology chosen is ESNET." << endl;
-			nettopo = fopen ("./Topology/ESNET14.txt", "r");
-			break;
-		case 3: 
-			cout << "The topology chosen is ITALY." << endl;
-			nettopo = fopen ("./Topology/ITALY21.txt", "r");
-			break;
-	}
-
-	cout << "what" << network->NumofNodes << endl;
+	nettopo = fopen (network->FileName, "r");
 
 	fscanf (nettopo, "%d", &network->NumofNodes);		
 	cout << "There are " << network->NumofNodes << " nodes in this topology." << endl;

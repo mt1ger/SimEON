@@ -7,7 +7,7 @@ double universal_rv () {
 }
 
 int uniform_rv (int NumofNodes) {
-	return (int) universal_rv () % NumofNodes;	
+	return (int) (universal_rv () * NumofNodes);	
 }
 
 double exponential_rv (double lambda) {

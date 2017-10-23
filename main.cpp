@@ -1,33 +1,81 @@
-#define AAA
+// #define DEBUG_test_routing_component
+
+#include <pthread.h>
+#include <time.h>
 
 #include <iostream>
 #include <vector>
+#include <string.h>
 #include "Network.h"
 #include "RoutingTable.h"
+
 
 using namespace std;
 
 
-int main (void) {
+clock_t StartPoint, EndPoint;
+int EndFlag = 0;
+
+void * timer_thread () {
+	StartPoint = clock ();
+	while (1) {
+		EndPoint = clock ();
+		cout << "end_flag is " << EndFlag << ", clock is " << EndPoint;
+		if (EndFlag == 1) {
+			pthread_exit (NULL);
+		}
+	}
+}
+
+
+int main (int argc, char *argv[]) {
+	pthread_t timer;
+
 	Network * network;
 	Network net;
 	network = &net;
+
+#ifdef DEBUG_test_routing_component
 	RoutingTable routinGTable (network);
+#endif
+	
+	if (argc != 6) {
+		cout << "Please input arguments in the following order: " << endl;	
+		cout << "\tThe file for network topology" << endl; 
+		cout << "\tTotal number of requests" << endl;
+		cout << "\tAverage arriving rate of request (Lambda)" << endl;
+		cout << "\tAverage holding time (1 / Mu)" << endl;
+		cout << "\tSeed for random number generation" << endl;
+		cout << endl;
+		exit (0);
+	}
+
+	strcpy (network->FileName, argv[1]);
+	network->NumofRequests = atol (argv[2]);
+	network->Lambda = atoi (argv[3]); 
+	network->Mu = atoi (argv[4]);
+	srand (atof (argv[5]));
+	
+	pthread_create (&timer, NULL, timer_thread, NULL);
 
 	network->init ();
 
-#ifdef AAA
-	cout << "where is the rest" << endl;
-	for (int i = 0; i < 14; i++) {
-		cout << "Table for " << i << endl;
-		for (int j = 0; j < 14; j++) {
-			for (int k = 0; k < NumofSpectralSlots; k++) {
-				cout << network->SpectralSlots[i][j][k];		
+	#ifdef DEBUG_test_routing_component
+	vector<int> aaa;
+	for (int i = 0; i<network->NumofNodes; i++) {
+		cout << "No. "<< i << " Node as predecessor" << endl;
+		for (int j = 0; j < network->NumofNodes; j++) {
+			cout << "No. " << j << " Node as successor" << endl;
+			aaa = routinGTable.get_shortest_path (i, j);		
+			for (int k = 0; k < aaa.size (); k++) {
+				cout << aaa[k] << ' '; 
 			}
-			cout << " End of one link " << j << endl;
+			cout << endl;
 		}
 	}
-#endif
+	#endif
+
+	network->simulation ();
 
 	return 1;
 }

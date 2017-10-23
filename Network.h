@@ -1,13 +1,18 @@
 #ifndef _NETWORK_H
-#define  _NETWORK_H
+#define _NETWORK_H
 
 #include <vector>
-#define  NumofSpectralSlots 300
 // #include "TrafficGenerator.h"
 // #include "RoutingTable.h"
-//
+#include "EventQueue.h"
+
+
+#define NumofSpectralSlots 300
+
+
 using namespace std;
 
+class RoutingTable;
 
 class Network {
 	public:
@@ -18,6 +23,7 @@ class Network {
 
 		/*** VARIABLES ***/ 
 		// Inputted Variables   
+		char FileName[500];
 		unsigned int Lambda, Mu;
 		long long NumofRequests;
 
@@ -26,9 +32,12 @@ class Network {
 		vector< vector<double> > NodesWeight;
 		vector< vector< vector<int> > > routingTable;
 
-		// Intermediate Variables
-		long long QueuedRequests;
+		// Timer and counters 
+		long long RequestCounter;
+		long long NumofAllocatedRequests;
 		long long NumofDoneRequests;
+		long long NumofFailedRequests;
+		double SystemClock;
 
 		vector< vector< vector<bool> > > SpectralSlots;
 

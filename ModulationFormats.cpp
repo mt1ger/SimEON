@@ -10,13 +10,14 @@ using namespace std;
  * QPSK:       4800km   2bits/symbol
  * 8QAM:       2400km   3bits/symbol
  * 16QAM:      1200km   4bits/symbol
- * DP-QPSK:    3000km   4bits/symbol
- * DP-8QAM:    1000km  	6bits/symbol 
- * DP-16QAM:    650km   8bits/symbol
+ * DP_QPSK:    3000km   4bits/symbol
+ * DP_8QAM:    1000km  	6bits/symbol 
+ * DP_16QAM:    650km   8bits/symbol
  ****************************************/
 
 
-void ModulationFormat::spectalslots_computation (unsigned int BitsPerSymbol) {
+void ModulationFormats::spectalslots_computation (unsigned int BitsPerSymbol) {
+	// "bm" means before modulation
 	if (bm_SptialSlots % BitsPerSymbol != 0) {
 		SpectralSlots = bm_SpectralSlots / BitsPerSymbol + 1;	
 	}
@@ -34,15 +35,15 @@ string ModulationFormats::mf_chosen () {
 	}
 
 	if (MaxDist > 4800 && MaxDist <= 9600) {
-		MF = "BPSK";
+		m_Format = BPSK;
 		spectalslots_computation (1);
 	}
 	else if (MaxDist > 3000 && MaxDist <= 4800) {
-		MF = "QPSK";
+		m_Format = QPSK;
 		spectalslots_computation (2);
 	}
 	else if (MaxDist > 1000 && MaxDist <= 3000) {
-		MF = "DP-QPSK";
+		m_Format = DP_QPSK;
 		spectalslots_computation (4);
 	}
 	// else if (MaxDist > 1200 && MaxDist <= 2400) {
@@ -54,11 +55,11 @@ string ModulationFormats::mf_chosen () {
 	// 	spectalslots_computation (4);
 	// }
 	else if (MaxDist > 650 && MaxDist <= 1000) {
-		MF = "DP-8QAM";
+		m_Format = DP_8QAM;
 		spectalslots_computation (6);
 	}
 	else if (MaxDist <= 650) {
-		MF = "DP-16QAM";	
+		m_Format = DP_16QAM;
 		spectalslots_computation (8);
 	}
 	
