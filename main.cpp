@@ -16,11 +16,10 @@ using namespace std;
 clock_t StartPoint, EndPoint;
 int EndFlag = 0;
 
-void * timer_thread () {
+static void * timer_thread (void *) {
 	StartPoint = clock ();
 	while (1) {
 		EndPoint = clock ();
-		cout << "end_flag is " << EndFlag << ", clock is " << EndPoint;
 		if (EndFlag == 1) {
 			pthread_exit (NULL);
 		}
@@ -76,6 +75,12 @@ int main (int argc, char *argv[]) {
 	#endif
 
 	network->simulation ();
+
+	EndFlag = 1;
+	pthread_join (timer, NULL);
+	double TimeSpent = (double)((EndPoint - StartPoint) / CLOCKS_PER_SEC); 
+	cout << "Time spent in \"ms\" is " << (EndPoint - StartPoint) / 1000.00 << endl;
+	cout << "************************************************************" << endl;
 
 	return 1;
 }

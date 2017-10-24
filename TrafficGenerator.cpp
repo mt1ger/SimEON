@@ -1,4 +1,4 @@
-// #define DEBUG_print_new_built_Event
+#define DEBUG_print_new_built_Event
 
 #include "TrafficGenerator.h"
 
@@ -32,7 +32,9 @@ void TrafficGenerator::gen_first_request () {
 
 	gen_unicast_sd (&src, &dest);
 	gen_temporal_parameters (&duration, network->Mu);
-	occupiedSpectralSlots = uniform_rv (30);
+	do {
+		occupiedSpectralSlots = uniform_rv (30);
+	} while (occupiedSpectralSlots == 0);
 	
 	request = new CircuitRequest (src, dest, startTime, duration, occupiedSpectralSlots, network->RequestCounter);
 	
@@ -55,7 +57,9 @@ void TrafficGenerator::gen_request (double systemTime) {
 	gen_unicast_sd (&src, &dest);
 	gen_temporal_parameters (&duration, network->Mu);
 	gen_temporal_parameters (&time, network->Lambda);
-	occupiedSpectralSlots = uniform_rv (30);
+	do {
+		occupiedSpectralSlots = uniform_rv (30);
+	} while (occupiedSpectralSlots == 0);
 	startTime = systemTime + time;
 	
 	request = new CircuitRequest (src, dest, startTime, duration, occupiedSpectralSlots, network->RequestCounter);

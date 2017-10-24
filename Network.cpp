@@ -90,6 +90,7 @@ cout << " " << NumofDoneRequests << " and " << NumofRequests << endl;
 		if (RequestCounter == NumofRequests) break;
 	}
 
+	cout << endl << "************************************************************" << endl;
 	cout << "Network Load: " << Lambda / Mu << " Erlang" << endl; 
 	cout << "Blocking Probability: " << (double) NumofFailedRequests / (double) NumofRequests << endl;
 }

@@ -1,9 +1,9 @@
 /**************************************************
  * First-Fitm  
  **************************************************/
-// #define DEBUG_print_resource_state_on_the_path
-// #define DEBUG_in_check_availability_link
-// #define DEBUG_print_SourceAvailableSections
+#define DEBUG_print_resource_state_on_the_path
+#define DEBUG_in_check_availability_link
+#define DEBUG_print_SourceAvailableSections
 
 
 #include <iostream>
@@ -45,7 +45,7 @@ void ResourceAssignment::check_availability_link (unsigned int predecessor, unsi
 	cout << "The checked SpectralSlots are between  " << SourceAvailableSections[i][0] << " and " << SourceAvailableSections[i][1] << endl;
 	#endif 
 
-	for (int j = SourceAvailableSections[i][0]; j < SourceAvailableSections[i][1]; j++) {
+	for (int j = SourceAvailableSections[i][0]; j < SourceAvailableSections[i][1] + 1; j++) {
 		#ifdef DEBUG_in_check_availability_link
 		cout << network->SpectralSlots[predecessor][successor][j] << ' ';
 		#endif
@@ -71,7 +71,7 @@ void ResourceAssignment::handle_requests (CircuitRequest * circuitRequest) {
 
 	CircuitRoute = routingTable.get_shortest_path (circuitRequest->Src, circuitRequest->Dest);
 
-	#ifdef DEBUG_print_resource_states_on_path
+	#ifdef DEBUG_print_resource_state_on_the_path
 	for (int i = 0; i < CircuitRoute.size (); i++) {
 		cout << CircuitRoute[i] << ' ';
 	}
@@ -79,7 +79,7 @@ void ResourceAssignment::handle_requests (CircuitRequest * circuitRequest) {
 	cout << "Start to print resources on the path before allocation" << endl;
 	for (int i = 1; i < CircuitRoute.size (); i++) {
 		cout << "On link " << CircuitRoute[i-1] << " to " << CircuitRoute[i] << endl;
-		for (int j = 0; j < 300; j++) {
+		for (int j = 0; j < NumofSpectralSlots; j++) {
 			cout <<  network->SpectralSlots[CircuitRoute[i - 1]][CircuitRoute[i]][j] << ' ';
 		}
 		cout << endl;
@@ -101,29 +101,35 @@ void ResourceAssignment::handle_requests (CircuitRequest * circuitRequest) {
 	#endif
  
 	// Loop for all the possible SpectralSlotSections on the link between source and its successor
-	for (int i = 0; i < SourceAvailableSections.size (); i++) {
-		AvailableFlag = true;
-		// Loop to check if the selected SpectalSlotSection on source is available for all the following links on the path
-		for (int j = 2; j < CircuitRoute.size (); j++) {
-			// For each link on the path, check if the selected SpectralSlotSection available on the selected link
-			check_availability_link (CircuitRoute[j - 1], CircuitRoute[j], i, &AvailableFlag);
-			// if the AvailableFlag is false, the selected SpectralSlotSecton is not available on the selected link
-			if (AvailableFlag == false) break;
-		}
-		if (AvailableFlag == true) {
-			AssignedSpectralSection.at (0) = SourceAvailableSections[i][0];	
-			AssignedSpectralSection.at (1) = SourceAvailableSections[i][1];
-			for (int i = 1; i < CircuitRoute.size (); i++) {
-				for (int k = AssignedSpectralSection[0]; k < AssignedSpectralSection[1]; k++) {
-					network->SpectralSlots[CircuitRoute[i - 1]][CircuitRoute[i]][k] = true;	
-				}
+	if (SourceAvailableSections.empty ()) AvailableFlag = false;
+	else {
+		for (int i = 0; i < SourceAvailableSections.size (); i++) {
+			AvailableFlag = true;
+			// Loop to check if the selected SpectalSlotSection on source is available for all the following links on the path
+			for (int j = 2; j < CircuitRoute.size (); j++) {
+				// For each link on the path, check if the selected SpectralSlotSection available on the selected link
+				check_availability_link (CircuitRoute[j - 1], CircuitRoute[j], i, &AvailableFlag);
+				// if the AvailableFlag is false, the selected SpectralSlotSecton is not available on the selected link
+				if (AvailableFlag == false) break;
 			}
-			break;
+			if (AvailableFlag == true) {
+				AssignedSpectralSection.at (0) = SourceAvailableSections[i][0];	
+				AssignedSpectralSection.at (1) = SourceAvailableSections[i][1];
+				for (int i = 1; i < CircuitRoute.size (); i++) {
+					for (int k = AssignedSpectralSection[0]; k < AssignedSpectralSection[1] + 1; k++) {
+						network->SpectralSlots[CircuitRoute[i - 1]][CircuitRoute[i]][k] = true;	
+					}
+				}
+				break;
+			}
 		}
+		
 	}
 
 	if (AvailableFlag == false) {
+		cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
 		cout << "Request " << circuitRequest->EventID << " is blocked." << endl;
+		cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
 		network->NumofFailedRequests++;
 	}
 	else if (AvailableFlag == true) {
@@ -134,7 +140,7 @@ void ResourceAssignment::handle_requests (CircuitRequest * circuitRequest) {
 		for(unsigned int t = 0; t < CircuitRoute.size()-1; t++)
 			cout << CircuitRoute.at(t) << " --> ";
 		cout << CircuitRoute.at (CircuitRoute.size() - 1) << endl;
-		cout << "The allocated Spectral Section is from slot " << AssignedSpectralSection[0] << " to " << AssignedSpectralSection[1] - 1 << endl; 
+		cout << "The allocated Spectral Section is from slot " << AssignedSpectralSection[0] << " to " << AssignedSpectralSection[1] << endl; 
 		cout << "------------------------------------------------------------" << endl << endl;
 
 		CircuitRelease * circuitRelease;
@@ -152,7 +158,7 @@ void ResourceAssignment::handle_requests (CircuitRequest * circuitRequest) {
 	cout << "Start to print resource state on the path after allocation" << endl;
 	for (int i = 1; i < CircuitRoute.size (); i++) {
 		cout << "On link " << CircuitRoute[i-1] << " to " << CircuitRoute[i] << endl;
-		for (int j = 0; j < 300; j++) {
+		for (int j = 0; j < NumofSpectralSlots; j++) {
 			cout <<  network->SpectralSlots[CircuitRoute[i - 1]][CircuitRoute[i]][j] << ' ';
 		}
 		cout << endl;
@@ -162,6 +168,21 @@ void ResourceAssignment::handle_requests (CircuitRequest * circuitRequest) {
 
 
 void ResourceAssignment::handle_releases (CircuitRelease * circuitRelease) {
+	#ifdef DEBUG_print_resource_state_on_the_path
+	for (int i = 0; i < circuitRelease->CircuitRoute.size (); i++) {
+		cout << circuitRelease->CircuitRoute[i] << ' ';
+	}
+	cout << endl;
+	cout << "Start to print resources on the path before allocation" << endl;
+	for (int i = 1; i < circuitRelease->CircuitRoute.size (); i++) {
+		cout << "On link " << circuitRelease->CircuitRoute[i-1] << " to " << circuitRelease->CircuitRoute[i] << endl;
+		for (int j = 0; j < NumofSpectralSlots; j++) {
+			cout <<  network->SpectralSlots[circuitRelease->CircuitRoute[i - 1]][circuitRelease->CircuitRoute[i]][j] << ' ';
+		}
+		cout << endl;
+	}
+	#endif
+
 	for (int i = 1; i < circuitRelease->CircuitRoute.size (); i++) {
 		for (int k = circuitRelease->OccupiedSpectralSection[0]; k < circuitRelease->OccupiedSpectralSection[1]; k++) {
 			network->SpectralSlots[circuitRelease->CircuitRoute[i - 1]][circuitRelease->CircuitRoute[i]][k] = false;	
@@ -172,6 +193,21 @@ void ResourceAssignment::handle_releases (CircuitRelease * circuitRelease) {
 	cout << "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << endl;
 	cout << "Release Event: " << circuitRelease->EventID << "\tTime: " << circuitRelease->EventTime << endl;
 	cout << "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << endl << endl;
+
+	#ifdef DEBUG_print_resource_state_on_the_path
+	for (int i = 0; i < circuitRelease->CircuitRoute.size (); i++) {
+		cout << circuitRelease->CircuitRoute[i] << ' ';
+	}
+	cout << endl;
+	cout << "Start to print resources on the path after allocation" << endl;
+	for (int i = 1; i < circuitRelease->CircuitRoute.size (); i++) {
+		cout << "On link " << circuitRelease->CircuitRoute[i-1] << " to " << circuitRelease->CircuitRoute[i] << endl;
+		for (int j = 0; j < NumofSpectralSlots; j++) {
+			cout <<  network->SpectralSlots[circuitRelease->CircuitRoute[i - 1]][circuitRelease->CircuitRoute[i]][j] << ' ';
+		}
+		cout << endl;
+	}
+	#endif
 }
 
 	
