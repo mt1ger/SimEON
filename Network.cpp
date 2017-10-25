@@ -1,4 +1,6 @@
 // #define DEBUG_test_sequence_in_queue
+// #define DEBUG_probe_NumofDoneRequests_and_NumofRequests
+ 
 
 #include <iostream> 
 #include "RoutingTable.h"
@@ -51,14 +53,9 @@ void Network::simulation () {
 		Event * event;
 		event = eventQueue->ev_Queue.front ();
 
-		// cout << "\tThe event time is " << event->EventTime << endl;
-		// cout << "\tThe system time is " << SystemClock << endl;
-
 		if (SystemClock <= event->EventTime) {
 			SystemClock = event->EventTime;
 		}
-		// cout << "\tThe system time is " << SystemClock << endl;
-
 
 		#ifdef DEBUG_test_sequence_in_queue
 		// The code to test if Events in Queue is in right order
@@ -76,9 +73,8 @@ void Network::simulation () {
 
 		if (event->EventType == c_Request) {
 			resourceAssignment.handle_requests ((CircuitRequest *) event);
+			if (RequestCounter != NumofRequests) 
 			trafficGenerator.gen_request (SystemClock);
-
-
 		}
 		else if (event->EventType == c_Release) {
 			resourceAssignment.handle_releases ((CircuitRelease *) event);
@@ -86,8 +82,10 @@ void Network::simulation () {
 
 		eventQueue->ev_Queue.pop_front (); //This will destroy the poped Event *.
 
-cout << " " << NumofDoneRequests << " and " << NumofRequests << endl;
-		if (RequestCounter == NumofRequests) break;
+	#ifdef DEBUG_probe_NumofDoneReqeusts_and_NumofRequests
+		cout << " " << NumofDoneRequests << " and " << NumofRequests << endl;
+	#endif
+		if (NumofDoneRequests == NumofRequests) break;
 	}
 
 	cout << endl << "************************************************************" << endl;
