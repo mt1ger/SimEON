@@ -1,6 +1,6 @@
 // #define DEBUG_test_sequence_in_queue
 // #define DEBUG_probe_NumofDoneRequests_and_NumofRequests
-#define DEBUG_print_EventID_of_blocked_requests
+// #define DEBUG_print_EventID_of_blocked_requests
  
 
 #include <iostream> 
@@ -95,6 +95,7 @@ void Network::simulation () {
 	for (int i = 0; i < BlockedRequests.size (); i++) {
 		cout << BlockedRequests[i] << ' ';
 	}
+	cout << endl;
 #endif
 	cout << "# of blocked requests is " << NumofFailedRequests << endl;
 	cout << "Network Load: " << Lambda / Mu << " Erlang" << endl; 

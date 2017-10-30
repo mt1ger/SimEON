@@ -1,10 +1,10 @@
 /**************************************************
  * First-Fit  
  **************************************************/
-#define DEBUG_print_resource_state_on_the_path
-#define DEBUG_in_check_availability_link
-#define DEBUG_print_SourceAvailableSections
-#define DEBUG_collect_EventID_of_blocked_requests //Need to collaberate with DEBUG_print_EventID_of_blocked_requests
+// #define DEBUG_print_resource_state_on_the_path
+// #define DEBUG_in_check_availability_link
+// #define DEBUG_print_SourceAvailableSections
+// #define DEBUG_collect_EventID_of_blocked_requests //Need to collaberate with DEBUG_print_EventID_of_blocked_requests
 
 // #define LOCK_use_Modulation_Formats
 
@@ -46,7 +46,7 @@ void ResourceAssignment::check_availability_source (unsigned int predecessor, un
 
 
 //Used event to represent Event instance
-void ResourceAssignment::check_availability_link (unsigned int predecessor, unsigned int successor, int i, bool * AvailableFlag) {
+void ResourceAssignment::check_availability_link (unsigned int predecessor, unsigned int successor, int i, bool * AvailableFlag, int * TempLocation) {
 
 	#ifdef DEBUG_in_check_availability_link
 	cout << "The checked link is between node " << predecessor << " and " << successor << endl; 
@@ -59,6 +59,7 @@ void ResourceAssignment::check_availability_link (unsigned int predecessor, unsi
 		#endif
 
 		if (network->SpectralSlots[predecessor][successor][j] == true) {
+			* TempLocation = j;
 			* AvailableFlag = false;
 			break;	
 		}	
@@ -77,6 +78,7 @@ void ResourceAssignment::handle_requests (CircuitRequest * circuitRequest) {
 	bool AvailableFlag = true;
 	vector<int> AssignedSpectralSection (2, -1);
 	string MF = "BPSK";
+	int TempLocation = -1;
 
 	CircuitRoute = routingTable.get_shortest_path (circuitRequest->Src, circuitRequest->Dest);
 
@@ -120,10 +122,17 @@ void ResourceAssignment::handle_requests (CircuitRequest * circuitRequest) {
 		for (int i = 0; i < SourceAvailableSections.size (); i++) {
 			AvailableFlag = true;
 
+			if (TempLocation >= SourceAvailableSections[i][0]) {
+				AvailableFlag = false;
+				continue;
+			}
+			// if (TempFlag == false)
+			// 	continue;
+
 			// Loop to check if the selected SpectalSlotSection on source is available for all the following links on the path
 			for (int j = 2; j < CircuitRoute.size (); j++) {
 				// For each link on the path, check if the selected SpectralSlotSection available on the selected link
-				check_availability_link (CircuitRoute[j - 1], CircuitRoute[j], i, &AvailableFlag);
+				check_availability_link (CircuitRoute[j - 1], CircuitRoute[j], i, &AvailableFlag, &TempLocation);
 				// if the AvailableFlag is false, the selected SpectralSlotSecton is not available on the selected link
 				if (AvailableFlag == false) break;
 			}

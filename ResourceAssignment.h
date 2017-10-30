@@ -16,7 +16,7 @@ class ResourceAssignment {
 		void handle_requests (CircuitRequest * circuitRequest);
 		void handle_releases (CircuitRelease * circuitRelease);
 		void check_availability_source (unsigned int predecessor, unsigned int successor, CircuitRequest * circuitRequest);
-		void check_availability_link (unsigned int predecessor, unsigned int successor, int i, bool * AvailableFlag); 
+		void check_availability_link (unsigned int predecessor, unsigned int successor, int i, bool * AvailableFlag, int * TempLocation); 
 
 	private:
 		Network * network;
