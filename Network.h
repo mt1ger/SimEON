@@ -7,7 +7,8 @@
 #include "EventQueue.h"
 
 
-#define NumofSpectralSlots 300
+#define MAX_OCCUPIED_SPECTRAL_SLOTS 10
+#define NumofSpectralSlots 20 
 
 
 using namespace std;
@@ -40,6 +41,9 @@ class Network {
 		double SystemClock;
 
 		vector< vector< vector<bool> > > SpectralSlots;
+
+
+		vector<int> BlockedRequests;
 
 		
 	private:

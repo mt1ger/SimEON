@@ -1,10 +1,12 @@
 /**************************************************
- * First-Fitm  
+ * First-Fit  
  **************************************************/
-// #define DEBUG_print_resource_state_on_the_path
-// #define DEBUG_in_check_availability_link
-// #define DEBUG_print_SourceAvailableSections
-#define LOCK_use_Modulation_Formats
+#define DEBUG_print_resource_state_on_the_path
+#define DEBUG_in_check_availability_link
+#define DEBUG_print_SourceAvailableSections
+#define DEBUG_collect_EventID_of_blocked_requests //Need to collaberate with DEBUG_print_EventID_of_blocked_requests
+
+// #define LOCK_use_Modulation_Formats
 
 #ifdef LOCK_use_Modulation_Formats
 #include "ModulationFormats.h"
@@ -26,6 +28,7 @@ void ResourceAssignment::check_availability_source (unsigned int predecessor, un
 		if (network->SpectralSlots[predecessor][successor][i] == false) {
 			for (int j = 0; j < circuitRequest->OccupiedSpectralSlots; j++) {
 				if (network->SpectralSlots[predecessor][successor][i + j] == true) {
+					i = i + j;//not i = i + j + 1, because there is a i++ for the loop
 					AvailableFlag = false;
 					break;	
 				}
@@ -117,8 +120,6 @@ void ResourceAssignment::handle_requests (CircuitRequest * circuitRequest) {
 		for (int i = 0; i < SourceAvailableSections.size (); i++) {
 			AvailableFlag = true;
 
-	
-
 			// Loop to check if the selected SpectalSlotSection on source is available for all the following links on the path
 			for (int j = 2; j < CircuitRoute.size (); j++) {
 				// For each link on the path, check if the selected SpectralSlotSection available on the selected link
@@ -142,6 +143,11 @@ void ResourceAssignment::handle_requests (CircuitRequest * circuitRequest) {
 
 	if (AvailableFlag == false) {
 		network->NumofDoneRequests++;
+
+		#ifdef DEBUG_collect_EventID_of_blocked_requests
+		network->BlockedRequests.push_back (circuitRequest->EventID);
+		#endif
+
 		cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
 		cout << "Request " << circuitRequest->EventID << " is blocked" << endl;
 		cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl << endl;

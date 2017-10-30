@@ -1,7 +1,7 @@
 CC=g++-7 
 LDFLAGS=-pthread
 CFLAGS=-c -Wall
-EXEC=Simulator
+EXEC=test
 
 SRCS=Network.cpp\
 	 ModulationFormats.cpp\
@@ -66,6 +66,7 @@ clean:
 
 # .cpp.o: 
 # 	$(CC) $(INCLUDES) $(CFLAGS) $< -o $@
+
 
 
 

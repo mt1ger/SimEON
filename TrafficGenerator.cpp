@@ -1,8 +1,6 @@
-// #define DEBUG_print_new_built_Event
+#define DEBUG_print_new_built_Event
 
 #include "TrafficGenerator.h"
-
-#define MAX_OCCUPIED_SPECTRAL_SLOTS 30
 
 
 using namespace std;
