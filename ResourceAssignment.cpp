@@ -4,7 +4,7 @@
 // #define DEBUG_print_resource_state_on_the_path
 // #define DEBUG_in_check_availability_link
 // #define DEBUG_print_SourceAvailableSections
-// #define DEBUG_collect_EventID_of_blocked_requests //Need to collaberate with DEBUG_print_EventID_of_blocked_requests
+#define DEBUG_collect_EventID_of_blocked_requests //Need to collaberate with DEBUG_print_EventID_of_blocked_requests
 
 // #define LOCK_use_Modulation_Formats
 

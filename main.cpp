@@ -51,8 +51,8 @@ int main (int argc, char *argv[]) {
 
 	strcpy (network->FileName, argv[1]);
 	network->NumofRequests = atol (argv[2]);
-	network->Lambda = atoi (argv[3]); 
-	network->Mu = atoi (argv[4]);
+	network->Lambda = atof (argv[3]); 
+	network->Mu = atof (argv[4]);
 	srand (atof (argv[5]));
 	
 	pthread_create (&timer, NULL, timer_thread, NULL);

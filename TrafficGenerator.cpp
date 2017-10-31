@@ -1,4 +1,4 @@
-#define DEBUG_print_new_built_Event
+// #define DEBUG_print_new_built_Event
 
 #include "TrafficGenerator.h"
 
@@ -19,7 +19,7 @@ void TrafficGenerator::gen_unicast_sd (unsigned int * src, unsigned int * dest) 
 }
 
 
-void TrafficGenerator::gen_temporal_parameters (double * time, unsigned int LorM) {
+void TrafficGenerator::gen_temporal_parameters (double * time, double LorM) {
 	* time = exponential_rv (LorM);
 }
 

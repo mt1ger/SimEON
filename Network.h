@@ -25,7 +25,7 @@ class Network {
 		/*** VARIABLES ***/ 
 		// Inputted Variables   
 		char FileName[500];
-		unsigned int Lambda, Mu;
+		double Lambda, Mu;
 		long long NumofRequests;
 
 		// Topology Variables
@@ -42,9 +42,7 @@ class Network {
 
 		vector< vector< vector<bool> > > SpectralSlots;
 
-
 		vector<int> BlockedRequests;
-
 		
 	private:
 };
