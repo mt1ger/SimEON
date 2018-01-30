@@ -86,7 +86,7 @@ void Network::simulation () {
 	#ifdef DEBUG_probe_NumofDoneReqeusts_and_NumofRequests
 		cout << " " << NumofDoneRequests << " and " << NumofRequests << endl;
 	#endif
-		if (NumofDoneRequests == NumofRequests) break;
+		if ((NumofAllocatedRequests + NumofFailedRequests) == NumofRequests) break;
 	}
 
 	cout << endl << "************************************************************" << endl;

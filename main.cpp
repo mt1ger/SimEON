@@ -6,6 +6,7 @@
 #include <iostream>
 #include <vector>
 #include <string.h>
+#include <fstream>
 #include "Network.h"
 #include "RoutingTable.h"
 
@@ -33,6 +34,8 @@ int main (int argc, char *argv[]) {
 	Network * network;
 	Network net;
 	network = &net;
+	char ResultFile[500];
+
 
 #ifdef DEBUG_test_routing_component
 	RoutingTable routinGTable (network);
@@ -76,9 +79,18 @@ int main (int argc, char *argv[]) {
 
 	network->simulation ();
 
+	double Erlang = network->Lambda / network->Mu;
+	double BlockingProbability = (double) network->NumofFailedRequests / (double) network->NumofRequests;
+
+	fstream fp;
+	fp.open ("Plot.csv", fstream::app);
+	string plot = to_string (Erlang) + ',' + to_string (BlockingProbability) + '\n';  
+	fp << plot;
+	fp.close ();
+
 	EndFlag = 1;
 	pthread_join (timer, NULL);
-	double TimeSpent = (double)((EndPoint - StartPoint) / CLOCKS_PER_SEC); 
+	double TimeSpent = (((double)(EndPoint - StartPoint)) / CLOCKS_PER_SEC); 
 	cout << "Time spent in \"ms\" is " << (EndPoint - StartPoint) / 1000.00 << endl;
 	cout << "************************************************************" << endl;
 

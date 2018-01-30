@@ -7,8 +7,11 @@
 #include "EventQueue.h"
 
 
-#define MAX_OCCUPIED_SPECTRAL_SLOTS 10
-#define NumofSpectralSlots 20 
+// #define MAX_OCCUPIED_SPECTRAL_SLOTS 16 
+#define MAX_OCCUPIED_SPECTRAL_SLOTS 4 
+#define GB 1
+// #define NumofSpectralSlots 128 
+#define NumofSpectralSlots 16 
 
 
 using namespace std;

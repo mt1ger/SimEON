@@ -1,6 +1,9 @@
-// #define DEBUG_print_new_built_Event
+#define DEBUG_print_new_built_Event
 
 #include "TrafficGenerator.h"
+#include <string>
+#include <fstream>
+#include <cmath>
 
 
 using namespace std;
@@ -35,13 +38,26 @@ void TrafficGenerator::gen_first_request () {
 	do {
 		occupiedSpectralSlots = uniform_rv (MAX_OCCUPIED_SPECTRAL_SLOTS);
 	} while (occupiedSpectralSlots == 0);
+
+	#ifdef MODIFY_integer
+	duration = ceil( duration);
+	startTime = (int) startTime;
+	#endif
 	
 	request = new CircuitRequest (src, dest, startTime, duration, occupiedSpectralSlots, network->RequestCounter);
 	
 	network->RequestCounter++;
+
 	#ifdef DEBUG_print_new_built_Event
-	cout << "New Built event:" << endl;
-	cout << request->Src << ' ' << request->Dest << ' ' << request->StartTime << ' ' << request->Duration << ' ' << request->OccupiedSpectralSlots << endl;
+	cout << "\tNew Built event:" << endl;
+	cout << '\t' << request->Src << ' ' << request->Dest << ' ' << request->StartTime << ' ' << request->Duration << ' ' << request->OccupiedSpectralSlots << endl;
+	int datasize = request->OccupiedSpectralSlots * 12.5;
+	string requestPara;
+	requestPara = to_string (request->Src + 1) + ',' + to_string (request->Dest + 1) + ',' + to_string (request->StartTime) + ',' + to_string (request->Duration) + ',' + to_string (datasize) + '\n'; 
+	ofstream fp;
+	fp.open ("RP.csv", fstream::app);
+	fp << requestPara;
+	fp.close ();
 	#endif
 
 	eventQUeue->ev_Queue.push_back (request);
@@ -61,6 +77,11 @@ void TrafficGenerator::gen_request (double systemTime) {
 		occupiedSpectralSlots = uniform_rv (MAX_OCCUPIED_SPECTRAL_SLOTS);
 	} while (occupiedSpectralSlots == 0);
 	startTime = systemTime + time;
+
+	#ifdef MODIFY_integer
+	duration = ceil( duration);
+	startTime = ceil( startTime);
+	#endif
 	
 	request = new CircuitRequest (src, dest, startTime, duration, occupiedSpectralSlots, network->RequestCounter);
 	
@@ -69,6 +90,13 @@ void TrafficGenerator::gen_request (double systemTime) {
 	#ifdef DEBUG_print_new_built_Event
 	cout << "\tNew Built event:" << endl;
 	cout << '\t' << request->EventID << ' ' <<request->Src << ' ' << request->Dest << ' ' << request->StartTime << ' ' << request->Duration << ' ' << request->OccupiedSpectralSlots << endl;
+	int datasize = request->OccupiedSpectralSlots * 12.5;
+	string requestPara;
+	requestPara = to_string (request->Src + 1) + ',' + to_string (request->Dest + 1) + ',' + to_string (request->StartTime) + ',' + to_string (request->Duration) + ',' + to_string (datasize) + '\n'; 
+	ofstream fp;
+	fp.open ("RP.csv", fstream::app);
+	fp << requestPara;
+	fp.close ();
 	#endif
 
 	eventQUeue->queue_insert (request);
